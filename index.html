@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pareto Amp installer — Geelen Audio</title>
+    <meta
+      name="description"
+      content="Flash Pareto Amp factory firmware in the browser. Chrome, Edge, Opera, and Firefox 151+."
+    />
+    <link rel="icon" href="https://images.squarespace-cdn.com/content/v1/69f633923523bc7665f309a9/8a227ea2-a561-4201-8b4f-eb34a20464ea/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Space+Grotesk:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./vendor/esp-web-tools/install-button.js"></script>
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="logo" href="https://geelen.audio" title="Geelen Audio">
+          <img
+            src="https://images.squarespace-cdn.com/content/v1/69f633923523bc7665f309a9/c72d2101-cfce-45d6-beb7-ff1e4fbc7c04/geelen_audio_full.png"
+            alt="Geelen Audio"
+          />
+        </a>
+        <a class="home-link" href="https://geelen.audio">geelen.audio</a>
+      </header>
+
+      <h1>Pareto Amp installer</h1>
+      <p class="lede">
+        Plug in the board over USB, pick Amped or Louder and a release, then
+        flash. No extra apps on Chrome, Edge, Opera, or Firefox 151+.
+        Safari cannot talk to serial ports — use Download instead.
+      </p>
+
+      <div class="warn">
+        <p>
+          A factory write at flash offset <strong>0x0</strong> erases NVS:
+          Wi-Fi, EQ, presets, and the device name. To keep NVS, clone the
+          matching tag and run <code>task fw:flash</code>.
+        </p>
+      </div>
+
+      <section class="panel">
+        <h2>1. Product</h2>
+        <div class="choices" role="radiogroup" aria-label="Product">
+          <label class="choice">
+            <input type="radio" name="product" value="amped" checked />
+            Amped
+          </label>
+          <label class="choice">
+            <input type="radio" name="product" value="louder" />
+            Louder
+          </label>
+        </div>
+        <p class="hint" id="usb-hint"></p>
+        <p class="note">
+          USB cannot tell Amped from Louder. An Amped image on a Louder board
+          leaves EQ in software. Override the radios if the hint is wrong.
+        </p>
+        <div class="actions" id="identify-actions">
+          <button type="button" class="btn-secondary" id="btn-identify">
+            Identify USB adapter
+          </button>
+          <button type="button" class="btn-ghost" id="btn-identify-all">
+            Show all serial ports
+          </button>
+        </div>
+        <p class="status" id="identify-status"></p>
+      </section>
+
+      <section class="panel">
+        <h2>2. Version</h2>
+        <label class="field" for="version">GitHub Release</label>
+        <select id="version" disabled>
+          <option>Loading…</option>
+        </select>
+        <p class="status" id="version-status"></p>
+      </section>
+
+      <section class="panel">
+        <h2>3. Flash</h2>
+        <p class="note">
+          ESP32 vs ESP32-S3 is detected after Connect. If this is an S3 in
+          USB-audio mode, hold <strong>BOOT</strong>, tap <strong>RESET</strong>,
+          release BOOT, then Connect.
+        </p>
+        <div class="actions">
+          <esp-web-install-button id="install-btn" class="hidden">
+            <button slot="activate" type="button" class="btn-primary">
+              Connect and flash
+            </button>
+            <span slot="unsupported">This browser has no Web Serial.</span>
+            <span slot="not-allowed">Web Serial needs HTTPS (or localhost).</span>
+          </esp-web-install-button>
+          <p class="note" id="no-serial">
+            In-browser flash needs Chrome, Edge, Opera, or Firefox 151+.
+          </p>
+        </div>
+        <p class="status" id="flash-status"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Download</h2>
+        <p class="note">
+          Works in every desktop browser. Writes the same factory image with
+          esptool.
+        </p>
+        <div class="downloads" id="downloads"></div>
+      </section>
+
+      <footer>
+        <p>
+          Firmware from
+          <a href="https://github.com/geelenaudio/paretoamp/releases">geelenaudio/paretoamp</a>
+          releases. After flash, join the open hotspot <strong>Geelen-Audio</strong>
+          and open <a href="http://192.168.4.1/">http://192.168.4.1/</a>.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+# Publish the installer to GitHub Pages. Factory .bin files are copied from
+# public geelenaudio/paretoamp releases (same origin, so ESP Web Tools can
+# fetch them). No secrets. List of versions on the page is still live GitHub API.
+
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Assemble site and factory images
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp -a index.html app.js styles.css .nojekyll _site/
+          cp -a vendor _site/vendor
+          python3 scripts/sync_firmware.py _site/firmware
+          find _site/firmware -type f | sort || true
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
