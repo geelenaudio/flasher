@@ -13,8 +13,9 @@ The version dropdown calls the public GitHub Releases API. ESP Web Tools
 must `fetch()` the `.bin`, and GitHub’s download CDN has no CORS headers, so
 CI copies those public factory files onto this Pages site under `firmware/<tag>/`.
 
-No tokens. After a new paretoamp release, wait up to an hour or run
-**Actions → Pages → Run workflow**.
+Paretoamp dispatches this Pages workflow after it attaches factory images
+to a release. An hourly run copies anything that dispatch missed. You can
+also run **Actions → Pages → Run workflow**.
 
 ## Local preview
 

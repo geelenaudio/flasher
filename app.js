@@ -191,7 +191,7 @@ async function updateFlash() {
   if (!hasEsp32 && !hasS3) {
     els.flashStatus.className = "status error";
     els.flashStatus.textContent =
-      "This version is not on the installer yet (copied hourly). Download still works. Or run the flasher Pages workflow.";
+      "This version is not on the installer yet. The release workflow copies it here when it finishes. Download still works.";
     return;
   }
 
